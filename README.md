@@ -18,7 +18,7 @@ More features are planned for future releases. Stay tuned for updates!
 
 ## Issues
 
-If you encounter any issues or have suggestions for improvement, please submit them through the [Issues](https://github.com/John4650-hub/web-application/issues) page on GitHub.
+If you encounter any issues or have suggestions for improvement, please submit them through the [Issues](https://github.com/StudyWindow/StudyWindow.github.io/issues) page on GitHub.
 
 ## Best Wishes
 
