@@ -1,0 +1,26 @@
+.status_student {
+    background-color: gray; /* Default color (red) */
+    width: 10px;
+    height: 10px;
+}
+.icon{
+  width:40px;
+  height:50px;
+}
+img{
+  max-height:120px;
+  max-width: 100%;
+}
+/* Blinking animation */
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* Blinking green dot style */
+.blinking-red-status_student {
+    background-color: red; /* Change color to green */
+    animation: blink 1s infinite; /* Blink animation */
+}
+
