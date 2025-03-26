@@ -169,6 +169,7 @@ function updateTimeProgress(wait_time){
 }
 function timePassedSince(timestamp_in_seconds) {
     // Get the current timestamp in seconds
+
     const currentTime=new Date()
     const currentTimeUTC=new Date(currentTime.toISOString())
     const currentTimestamp = Math.floor(currentTimeUTC.getTime()/1000)
@@ -179,13 +180,29 @@ function timePassedSince(timestamp_in_seconds) {
     const hours = Math.floor(diffInSeconds / 3600);
     const minutes = Math.floor((diffInSeconds % 3600) / 60);
     const seconds = diffInSeconds % 60;
+    if(hours>=24){
+      const days=Math.floor(hours/24)
+      const todayMidnight=new Date(currentTimeUTC.setUTCHours(0,0,0,0));
+      const todayMidnightSeconds= Math.floor(todayMidnight.getTime()/1000)
+      const adjDiffInSeconds = currentTimestamp - todayMidnightSeconds
 
+      const adjHours = Math.floor(adjDiffInSeconds / 3600);
+      const adjMinutes = Math.floor((adjDiffInSeconds % 3600) / 60);
+      const adjSeconds = adjDiffInSeconds % 60;
+      const adjFormattedTime = `${days.toString()} days ,${adjHours.toString().padStart(2, '0')}:${adjMinutes.toString().padStart(2, '0')}:${adjSeconds.toString().padStart(2, '0')}`;
+      return adjFormattedTime;
+    }
     // Format the results as HH:MM:SS
     const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
     return formattedTime;
 }
-function calculateDayPercentage(timeString) {
+function calculateDayPercentage(parTimeString) {
+    let timeString=parTimeString
+    const IsdaysInString = parTimeString.search("days")
+   if(IsdaysInString!= -1){
+     timeString = parTimeString.substring(IsdaysInString+6);
+    }
     // Split the time string into hours, minutes, and seconds
     const [hours, minutes, seconds] = timeString.split(':').map(Number);
 
