@@ -14,6 +14,7 @@ class StudentStreamer{
     const icon_student=document.createElement('div');
     const icon_img_student = document.createElement('img')
     icon_img_student.setAttribute("data-src",this.image_url)
+    icon_img_student.setAttribute("src",this.image_url)
     icon_img_student.setAttribute("loading","lazy")
     icon_img_student.setAttribute("class","img-fluid lozad rounded")
     icon_student.setAttribute("class","col-8 icon")
