@@ -15,6 +15,12 @@ The creation of this application was motivated by the desire to help others stay
 ## Future Features
 
 More features are planned for future releases. Stay tuned for updates!
+**Planned features**
+- [ ] Personal study channels (favourites)
+- [ ] Personal Leaderboard with your favourited channels
+- [ ] Personal Timer
+- [ ] Page numbers for all channels
+- [ ] Streaks and saving of data(browser based and downloading backup)
 
 ## Issues
 
