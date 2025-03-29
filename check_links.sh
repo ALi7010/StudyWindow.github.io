@@ -1,37 +1,32 @@
 #!/bin/bash
 
-# Define the local and CDN paths
-local_bootstrap_css="/deps/bootstrap.min.css"
-cdn_bootstrap_css="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+local_files=("{{ url_for('static', filename='css/style.css')}}" "{{ url_for('static', filename='js/src/streams.js')}}" "/deps/bootstrap.min.css" "/deps/all.min.css" "/deps/bootstrap.min.js" "/deps/popper.min.js" "<script src=\"{{ url_for('static', filename='js/utils/utility.js')}}\"></script>" "/deps/all.min.js")
+remote_files=("https://raw.githubusercontent.com/StudyWindow/StudyWindow.github.io/refs/heads/main/css/style.css" "https://raw.githubusercontent.com/StudyWindow/StudyWindow.github.io/refs/heads/main/js/src/streams.js" "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" "https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" "https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" "<!--nothing-->" "https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/js/all.min.js")
 
-local_fontawesome_css="/deps/all.min.css"
-cdn_fontawesome_css="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css"
-
-local_bootstrap_js="/deps/bootstrap.min.js"
-cdn_bootstrap_js="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-
-local_popper_js="/deps/popper.min.js"
-cdn_popper_js="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-
-local_fontawesome_js="/deps/all.min.js"
-cdn_fontawesome_js="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/js/all.min.js"
-
-# Find all HTML files
-files=$(git diff --name-only --diff-filter=ACM | grep ".html$")
+pages=("streams" "about" "favorites" "leaderboard")
+for page in ${pages[@]}; do
+  local_temp="{{ url_for('render_page', page='$page') }}"
+  remote_temp="https://studywindow.github.io/pages/$page.html"
+  local_files+=("$local_temp")
+  remote_files+=("$remote_temp")
+done
+length_pages="${#local_files[@]}"
+echo "length =$length_pages"
+files=$(find /storage/emulated/0/.Apps/YtStudy -type f -name "*.html")
 for file in $files; do
     if [ -f "$file" ]; then
         echo "Replacing links with cdn valid links for $file"
         # Check and update the links if necessary
-        sed -i.bak "s|$local_bootstrap_css|$cdn_bootstrap_css|g" "$file"
-        sed -i.bak "s|$local_fontawesome_css|$cdn_fontawesome_css|g" "$file"
-        sed -i.bak "s|$local_bootstrap_js|$cdn_bootstrap_js|g" "$file"
-        sed -i.bak "s|$local_popper_js|$cdn_popper_js|g" "$file"
-        sed -i.bak "s|$local_fontawesome_js|$cdn_fontawesome_js|g" "$file"
-
-        # Stage the updated file
-        git add "$file"
+        name=$(basename "$file")
+        filename="dev/$name"
+        echo "$filename"
+        cp "$file" "$filename"
+        for index in $(seq 0 $((length_pages - 1)));do
+          old="${local_files[$index]}"
+          new="${remote_files[$index]}"
+          sed -i "s|$old|$new|g" $filename
+        done
     fi
 done
-
 # Exit with success
 exit 0
